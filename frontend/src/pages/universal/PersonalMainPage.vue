@@ -211,8 +211,7 @@
 
       <!-- 账户资金信息 -->
       <div v-if="showAccountAmount" style="width: 100%; ">
-        <div class="q-pa-md row items-start q-gutter-md"
-          style="min-width: 800px; margin-left: 5%; margin-top: 5%;">
+        <div class="q-pa-md row items-start q-gutter-md" style="min-width: 800px; margin-left: 5%; margin-top: 5%;">
           <q-card class="my-card" flat bordered style="min-width: 700px;">
 
             <q-card-section>
@@ -428,59 +427,59 @@
             <q-spinner-hourglass style="margin:auto" color="purple" size="4em" />
           </div>
           <div v-else>
-          <div v-if="unpaid_order_lst.length === 0">
-            <div class="text-caption text-grey" style="text-align: center; margin-top: 10px;">暂时没有待支付订单哦，快去下单吧！</div>
-          </div>
+            <div v-if="unpaid_order_lst.length === 0">
+              <div class="text-caption text-grey" style="text-align: center; margin-top: 10px;">暂时没有待支付订单哦，快去下单吧！</div>
+            </div>
 
-          <div v-else>
-            <div v-for="unpaid_order in unpaid_order_lst" :key="unpaid_order">
-              <q-card class="shop-card" flat bordered style="width: 95%; margin-top: 2%; display: flex;">
-                <q-card-section horizontal style="flex-grow: 9.5; width: 85%;">
-                  <q-card-section class="q-pt-xs" style="width: 100%; display: flex;">
+            <div v-else>
+              <div v-for="unpaid_order in unpaid_order_lst" :key="unpaid_order">
+                <q-card class="shop-card" flat bordered style="width: 95%; margin-top: 2%; display: flex;">
+                  <q-card-section horizontal style="flex-grow: 9.5; width: 85%;">
+                    <q-card-section class="q-pt-xs" style="width: 100%; display: flex;">
 
-                    <div class="customer-order-text" style="width: 100%; flex-grow: 5;">
-                      <div class="text-overline text-grey-10">订单编号{{ unpaid_order.userOrder.id }}</div>
+                      <div class="customer-order-text" style="width: 100%; flex-grow: 5;">
+                        <div class="text-overline text-grey-10">订单编号{{ unpaid_order.userOrder.id }}</div>
 
-                      <div class="q-mt-sm q-mb-xs" style="font-size: large;">商店名称{{
-                        unpaid_order.shop.shopName }}</div>
-                      <div class="text-bold q-mt-sm q-mb-xs" style="font-size: large;">商品名称{{
-                        unpaid_order.goods.goodsName }}</div>
-                      <div class="text-bold q-mt-sm q-mb-xs" style="margin-left: 3px; color: gray;">×
-                        数量{{ unpaid_order.userOrder.quantity }}</div>
-                      <div class="text-bold q-mt-sm q-mb-xs">实付款：¥{{ unpaid_order.userOrder.totalPrice }}</div>
+                        <div class="q-mt-sm q-mb-xs" style="font-size: large;">商店名称{{
+                          unpaid_order.shop.shopName }}</div>
+                        <div class="text-bold q-mt-sm q-mb-xs" style="font-size: large;">商品名称{{
+                          unpaid_order.goods.goodsName }}</div>
+                        <div class="text-bold q-mt-sm q-mb-xs" style="margin-left: 3px; color: gray;">×
+                          数量{{ unpaid_order.userOrder.quantity }}</div>
+                        <div class="text-bold q-mt-sm q-mb-xs">实付款：¥{{ unpaid_order.userOrder.totalPrice }}</div>
 
-                      <div class="text q-mt-sm q-mb-xs">收货人：{{ unpaid_order.deliveryAddress.name }}&nbsp; &nbsp; 联系电话：{{
-                        unpaid_order.deliveryAddress.phoneNumber }}</div>
-                      <div class="text q-mt-sm q-mb-xs">收货地址：{{ unpaid_order.deliveryAddress.address }}</div>
+                        <div class="text q-mt-sm q-mb-xs">收货人：{{ unpaid_order.deliveryAddress.name }}&nbsp; &nbsp; 联系电话：{{
+                          unpaid_order.deliveryAddress.phoneNumber }}</div>
+                        <div class="text q-mt-sm q-mb-xs">收货地址：{{ unpaid_order.deliveryAddress.address }}</div>
 
-                    </div>
+                      </div>
 
-                    <div class="customer-order-pict" style=" flex-grow: 5;">
-                      <!-- TODO: 填上商品图片 -->
-                      <q-img class="rounded-borders" :src="unpaid_order.goods.image[0]"
-                        style="width:200px; height:150px"></q-img>
-                    </div>
+                      <div class="customer-order-pict" style=" flex-grow: 5;">
+                        <!-- TODO: 填上商品图片 -->
+                        <q-img class="rounded-borders" :src="unpaid_order.goods.image[0]"
+                          style="width:200px; height:150px"></q-img>
+                      </div>
 
+                    </q-card-section>
                   </q-card-section>
-                </q-card-section>
 
-                <q-card-actions style="flex-grow: 0.5;">
-                  <!-- TODO: 补充操作 -->
-                  <q-btn flat style="color: #570089; font-size: large;" label="取消订单"
-                    @click="confirmCancelOrder(unpaid_order)" />
-                </q-card-actions>
-              </q-card>
-            </div>
+                  <q-card-actions style="flex-grow: 0.5;">
+                    <!-- TODO: 补充操作 -->
+                    <q-btn flat style="color: #570089; font-size: large;" label="取消订单"
+                      @click="confirmCancelOrder(unpaid_order)" />
+                  </q-card-actions>
+                </q-card>
+              </div>
 
-            <div class="btn-box" style="display: flex;">
-              <q-btn flat color="secondary" label="上一页" style="flex-grow: 1;"
-                @click="unpaid_current_page += 1; getUnpaidOrder(unpaid_current_page)"
-                :disabled="unpaid_current_page === 1" />
-              <q-btn flat color="secondary" label="下一页" style="flex-grow: 1;"
-                @click="unpaid_current_page += 1; getUnpaidOrder(unpaid_current_page)"
-                :disabled="unpaid_current_page === unpaid_total_page" />
+              <div class="btn-box" style="display: flex;">
+                <q-btn flat color="secondary" label="上一页" style="flex-grow: 1;"
+                  @click="unpaid_current_page += 1; getUnpaidOrder(unpaid_current_page)"
+                  :disabled="unpaid_current_page === 1" />
+                <q-btn flat color="secondary" label="下一页" style="flex-grow: 1;"
+                  @click="unpaid_current_page += 1; getUnpaidOrder(unpaid_current_page)"
+                  :disabled="unpaid_current_page === unpaid_total_page" />
+              </div>
             </div>
-          </div>
           </div>
         </div>
 
@@ -1119,8 +1118,7 @@
           </q-card-section>
 
           <q-card-actions align="right">
-            <q-btn flat label="OK" color="secondary" v-close-popup
-              @click="operation_success_alert_layout = false;" />
+            <q-btn flat label="OK" color="secondary" v-close-popup @click="operation_success_alert_layout = false;" />
           </q-card-actions>
         </q-card>
       </q-dialog>
@@ -2121,28 +2119,35 @@ function confirmCancelOrder(order) {
 
 function confirmRefundOrder(order) {
   console.log("确认退货退款: ", order)
-  refund_order_id.value = order.userOrder.id
 
-  refund_order_shopName.value = order.shop.shopName
-  refund_order_goodsName.value = order.goods.goodsName
-  refund_order_img.value = order.goods.image
-  refund_order_quantity.value = order.userOrder.quantity
-  refund_order_totalPrice.value = order.userOrder.totalPrice
+  if (order.userOrder.unitPrice !== order.goods.price) {
+    operation_fail_alert_layout.value = true
+    operation_fail_message.value = "申请退货退款失败，活动商品无法退货退款！"
+    refund_order_layout.value = false
+  } else {
+    refund_order_id.value = order.userOrder.id
 
-  refund_order_recipiant.value = order.deliveryAddress.name
-  refund_order_rec_tele.value = order.deliveryAddress.phoneNumber
-  refund_order_rec_address.value = order.deliveryAddress.address
+    refund_order_shopName.value = order.shop.shopName
+    refund_order_goodsName.value = order.goods.goodsName
+    refund_order_img.value = order.goods.image
+    refund_order_quantity.value = order.userOrder.quantity
+    refund_order_totalPrice.value = order.userOrder.totalPrice
 
-  console.log("确认退货退款信息传递：\n订单编号", refund_order_id,
-    "\n商店名：", refund_order_shopName,
-    "\n商品名：", refund_order_goodsName,
-    "\n数量：", refund_order_quantity,
-    "\n实付款：", refund_order_totalPrice,
-    "\n收货人：", refund_order_recipiant,
-    "\n联系方式：", refund_order_rec_tele,
-    "\n地址：", refund_order_rec_address.value)
+    refund_order_recipiant.value = order.deliveryAddress.name
+    refund_order_rec_tele.value = order.deliveryAddress.phoneNumber
+    refund_order_rec_address.value = order.deliveryAddress.address
 
-  refund_order_layout.value = true
+    console.log("确认退货退款信息传递：\n订单编号", refund_order_id,
+      "\n商店名：", refund_order_shopName,
+      "\n商品名：", refund_order_goodsName,
+      "\n数量：", refund_order_quantity,
+      "\n实付款：", refund_order_totalPrice,
+      "\n收货人：", refund_order_recipiant,
+      "\n联系方式：", refund_order_rec_tele,
+      "\n地址：", refund_order_rec_address.value)
+
+    refund_order_layout.value = true
+  }
 }
 
 // 用户删除订单
@@ -2171,6 +2176,7 @@ function deleteOrder(del_order_id) {
 // 用户退款
 function refunding(orderId) {
   console.log("User refunding: ", orderId)
+
   axiosInstance.put('/userOrder/refunding', {
     orderId: orderId
   }, {
@@ -2218,17 +2224,17 @@ function cancelOrder(orderId) {
 function ensureReceiveOrder(order) {
   let current_time = getFormattedDate()
   console.log("User confirm receiving: \norder实例：", order,
-              "\naddressId: ", order.deliveryAddress.id,
-              "\ndate: ", order.userOrder.date,
-              "\nevent Id: ", order.userOrder.eventId,
-              "\ngoods Id: ", order.goods.id,
-              "\norder id: ", order.userOrder.id,
-              "\nquantity: ", order.userOrder.quantity,
-              "\nshop id: ", order.shop.id,
-              "\ntotal price: ", order.userOrder.totalPrice,
-              "\nunit price: ", order.userOrder.unitPrice,
-              "\nuser id: ", order.userOrder.userId,
-              "\ncurrent time: ", current_time)
+    "\naddressId: ", order.deliveryAddress.id,
+    "\ndate: ", order.userOrder.date,
+    "\nevent Id: ", order.userOrder.eventId,
+    "\ngoods Id: ", order.goods.id,
+    "\norder id: ", order.userOrder.id,
+    "\nquantity: ", order.userOrder.quantity,
+    "\nshop id: ", order.shop.id,
+    "\ntotal price: ", order.userOrder.totalPrice,
+    "\nunit price: ", order.userOrder.unitPrice,
+    "\nuser id: ", order.userOrder.userId,
+    "\ncurrent time: ", current_time)
   axiosInstance.put('/userOrder/receive', {
     addressId: order.deliveryAddress.id,
     date: order.userOrder.date,
