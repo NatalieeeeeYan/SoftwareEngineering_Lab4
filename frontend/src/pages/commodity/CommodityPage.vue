@@ -252,7 +252,7 @@ function toOrder(){
   let multiple = 0
   if(commodity.value.event.id)
   {
-    multiple.value = Math.floor(total / commodity.value.event.amount);
+    multiple = Math.floor(total / commodity.value.event.amount);
   }
   const total_event = total - multiple*commodity.value.event.discount;
   const total_discount = total - total_event;

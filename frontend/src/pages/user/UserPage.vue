@@ -86,7 +86,7 @@
                             <div class="q-pa-md">
                               <q-carousel class="commodity_img" swipeable animated v-model="commodity.goods.slide"
                                 height="200px" thumbnails infinite>
-                                <q-carousel-slide v-for="(image, index) in commodity.image" :key="index" :name="index + 1"
+                                <q-carousel-slide v-for="(image, index) in commodity.goods.image" :key="index" :name="index + 1"
                                   :img-src="image" />
                               </q-carousel>
                             </div>
