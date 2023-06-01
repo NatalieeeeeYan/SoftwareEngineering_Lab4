@@ -296,7 +296,7 @@ function toOrder(){
   console.log(list)
 
   if(commodity.value.event.id == 0 || commodity.value.event.status!=1){
-    event_detail['0'] = list
+    event_detail['0'] = []
   }
   else{
     event_detail[commodity.value.event.id] = list

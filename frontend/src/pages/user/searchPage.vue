@@ -190,6 +190,7 @@ onMounted(() => {
 
   text.value = localStorage.getItem('text')
   commodities.value = []
+
   //请求搜索结果
   axiosInstance.get('/Goods/searchGoods', {
     params: {
