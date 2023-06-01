@@ -1451,7 +1451,7 @@ function getAllSalesActivity() {
     const r = response.data['data']
     console.log("get all activities: ", r)
     r.forEach(function (item) {
-      if (item !== null) {
+      if (item !== null && item.status === 1) {
         const [s_year, s_month, s_day] = item.startDate;
         item.startDate = `${s_year}年${s_month}月${s_day}日`;
         const [e_year, e_month, e_day] = item.endDate;
@@ -1570,7 +1570,7 @@ function getRcSalesActivityApp() {
     const r = response.data['data']
     console.log('待批准的活动申请: ', r);
     r.forEach(function (item) {
-      if (r != null) {
+      if (item != null && item.status === 1) {
         const [s_year, s_month, s_day] = item.event.startDate;
         item.event.startDate = `${s_year}年${s_month}月${s_day}日`;
         const [e_year, e_month, e_day] = item.event.endDate;
