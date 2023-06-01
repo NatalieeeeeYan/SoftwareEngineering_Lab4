@@ -465,8 +465,13 @@
 
                   <q-card-actions style="flex-grow: 0.5;">
                     <!-- TODO: 补充操作 -->
-                    <q-btn flat style="color: #570089; font-size: large;" label="取消订单"
-                      @click="confirmCancelOrder(unpaid_order)" />
+                    <div class="btn-div"
+                      style=" display: flex; flex-direction: column; align-items: center; justify-content: flex-start; height: 80%;">
+                      <q-btn flat style="color: #570089; font-size: large; flex-grow: 1;" label="支付"
+                        @click="confirmPayOrder(unpaid_order)" />
+                      <q-btn flat style="color: #570089; font-size: large; flex-grow: 1;" label="取消订单"
+                        @click="confirmCancelOrder(unpaid_order)" />
+                    </div>
                   </q-card-actions>
                 </q-card>
               </div>
@@ -953,6 +958,59 @@
         </q-layout>
       </q-dialog>
 
+      <q-dialog v-model="pay_order_layout" no-click-outside-close>
+        <q-layout view="Lhh lpR fff" container class="bg-white">
+          <q-header class="bg-primary">
+            <q-toolbar>
+              <q-btn flat @click="drawer = !drawer" round dense icon="menu" />
+              <q-toolbar-title>支付订单确认</q-toolbar-title>
+              <q-btn flat @click="drawerR = !drawerR;" round dense icon="menu" />
+              <q-btn flat v-close-popup round dense icon="close" @click="delete_order_layout = false" />
+            </q-toolbar>
+          </q-header>
+
+          <q-page-container>
+            <q-page padding>
+              <q-card class="shop-card" flat bordered style="width: 95%; margin-top: 2%; ">
+                <q-card-section class="q-pt-xs" style="width: 100%; display: flex;">
+                  <div class="customer-order-text" style="width: 100%; flex-grow: 5;">
+                    <div class="text-overline text-grey-10">订单编号{{ pay_order.userOrder.id }}</div>
+
+                    <div class="q-mt-sm q-mb-xs" style="font-size: large;">商店名称{{
+                      pay_order.shop.shopName }}</div>
+                    <div class="text-bold q-mt-sm q-mb-xs" style="font-size: large;">商品名称{{
+                      pay_order.goods.goodsName }}</div>
+                    <div class="text-bold q-mt-sm q-mb-xs" style="margin-left: 3px; color: gray;">×
+                      {{ cancel_order_quantity }}</div>
+                    <div class="text-bold q-mt-sm q-mb-xs">实付款：¥{{ pay_order.userOrder.totalPrice }}</div>
+
+                    <div class="text q-mt-sm q-mb-xs">收货人：{{ pay_order.deliveryAddress.name }}&nbsp; &nbsp;
+                      联系电话：{{ pay_order.deliveryAddress.phoneNumber }}</div>
+                    <div class="text q-mt-sm q-mb-xs">收货地址：{{ pay_order.deliveryAddress.address }}</div>
+
+                  </div>
+
+                  <div class="customer-order-pict" style=" flex-grow: 5;">
+                    <!-- TODO: 填上商品图片 -->
+                    <q-img class="rounded-borders" :src="pay_order.goods.image[0]"
+                      style="width:200px; height:150px"></q-img>
+                  </div>
+                </q-card-section>
+
+                <q-card-actions style="overflow: hidden; flex-grow: 1; display: flex;">
+                  <div class="submit">
+                    <q-btn label="确认支付" type="submit" color="negative" flat class="q-ml-sm" style="font-size: large;"
+                      @click="payOrder(pay_order)" />
+                    <q-btn label="取消" type="reset" color="indigo-10" flat class="q-ml-sm" style="font-size: large;"
+                      @click="pay_order_layout = false" />
+                  </div>
+                </q-card-actions>
+              </q-card>
+            </q-page>
+          </q-page-container>
+        </q-layout>
+      </q-dialog>
+
       <q-dialog v-model="delete_order_layout" no-click-outside-close>
         <q-layout view="Lhh lpR fff" container class="bg-white">
           <q-header class="bg-primary">
@@ -1241,6 +1299,7 @@ let rec_address = ref(null)
 let rec_tele = ref(null)
 let edit_add_layout = ref(false)
 
+
 let cancelled_total_page = ref(null)
 let unpaid_total_page = ref(null)
 let finished_total_page = ref(null)
@@ -1278,6 +1337,9 @@ let refunded_order_lst = ref([])        // 已退款
 let refunding_order_lst = ref([])       // 待退款
 let delivering_order_lst = ref([])      // 待收货
 let finished_order_lst = ref([])        // 已完成
+
+let pay_order = ref(null)
+let pay_order_layout = ref(false)
 
 let delete_order_id = ref(null)
 let delete_order_shopName = ref(null)
@@ -2148,6 +2210,46 @@ function confirmRefundOrder(order) {
 
     refund_order_layout.value = true
   }
+}
+
+function confirmPayOrder(order) {
+  console.log("确认支付: ", order)
+  pay_order.value = order
+  console.log("确认支付信息传递：", pay_order.value)
+  pay_order_layout.value = true
+}
+
+function payOrder(order) {
+  console.log("支付订单: ", order)
+  let pay_order_obj = {
+    "addressId": order.deliveryAddress.id,
+    "date": order.userOrder.date,
+    "eventId": order.userOrder.eventId,
+    "goodsId": order.userOrder.goodsId,
+    "id": order.userOrder.id,
+    "quantity": order.userOrder.quantity,
+    "shopId": order.userOrder.shopId,
+    "totalPrice": order.userOrder.totalPrice,
+    "unitPrice": order.userOrder.unitPrice,
+    "userId": order.userOrder.userId,
+    "status": order.userOrder.status,
+  }
+  console.log("下单obj：", pay_order_obj)
+  let pay_list = []
+  pay_list.push(pay_order_obj)
+  console.log("下单list：", pay_list)
+  axiosInstance.post('/userOrder/pay', pay_list).then((response) => {
+    console.log("用户支付待支付订单返回数据：", response)
+    if (response.data['code'] === 20000) {
+      operation_success_alert_layout.value = true
+      operation_success_message.value = '订单已支付'
+      delete_order_layout.value = false
+    } else {
+      operation_fail_message.value = response.data['message']
+      operation_fail_alert_layout.value = true
+      delete_order_layout.value = false
+    }
+  });
 }
 
 // 用户删除订单
