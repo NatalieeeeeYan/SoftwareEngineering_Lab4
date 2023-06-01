@@ -435,6 +435,10 @@
                         style="display: inline-block;">
                         {{ category }}&nbsp;
                       </div>
+                      <div class="shop-fund">参加活动的店铺注册资金下限：¥{{ activity.shopFund }}</div>
+                      <div class="shop-selling-amount">参加活动的店铺月销量下限：¥{{ activity.shopSales }}</div>
+                      <div class="shop-monthly-profit">参加活动的店铺月销售额下限：{{ activity.shopProfit }}件</div>
+
                     </q-card-section>
 
                   </q-card>
@@ -581,6 +585,18 @@
                   val => val && SalesFundUpperBound(val) || '超出商城账户余额',
                 ]" style="margin-left: 5%; width: 90%;" />
 
+                <q-input color="primary" v-model="shop_register_fund" label="商家注册资金下限（元）" lazy-rules :rules="[
+                  val => val && /^\d+(\.\d{1,2})?$/.test(val) || '请输入商家注册资金下限（元）',
+                ]" style="margin-left: 5%; width: 90%;" />
+
+                <q-input color="primary" v-model="shop_selling_amount" label="店铺月销量下限（件）" lazy-rules :rules="[
+                  val => val && /^\d+(\.\d{1,2})?$/.test(val) || '请输入店铺月销量下限（件）',
+                ]" style="margin-left: 5%; width: 90%;" />
+
+                <q-input color="primary" v-model="shop_monthly_profit" label="店铺月销售额下限（元）" lazy-rules :rules="[
+                  val => val && /^\d+(\.\d{1,2})?$/.test(val) || '请输入店铺月销售额下限（元）',
+                ]" style="margin-left: 5%; width: 90%;" />
+
                 <div class="q-px-sm" style="font-size: large;" color="grey-10">
                   可参与活动的商品：
                 </div>
@@ -709,6 +725,9 @@ let sales_decrease_price = ref(null)
 let sales_fund = ref(null)
 let activity_start_date = ref(null)
 let activity_end_date = ref(null)
+let shop_register_fund = ref(null)
+let shop_selling_amount = ref(null)
+let shop_monthly_profit = ref(null)
 
 let current_time = ref(null)
 
@@ -1540,11 +1559,14 @@ function submitNewSalesActivity() {
   )
   axiosInstance.post('/event/openEvent', {
     amount: sales_demand_price.value,
-    discount: sales_decrease_price.value,
     category: selection.value,
-    startDate: activity_start_date.value,
+    discount: sales_decrease_price.value,
     endDate: activity_end_date.value,
     funds: sales_fund.value,
+    shopFund: shop_register_fund.value, 
+    shopProfit: shop_monthly_profit.value, 
+    shopSales: shop_selling_amount.value, 
+    startDate: activity_start_date.value,
   }, {
     params: {
       sdate: current_time.value,
