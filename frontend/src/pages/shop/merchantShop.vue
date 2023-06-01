@@ -1048,7 +1048,7 @@ function getAllSalesActivity() {
     const r = response.data['data']
     console.log("get all activities: ", r)
     r.forEach(function (item) {
-      if (item !== null && item.status === 1) {
+      if (item !== null && (item.status === 1 || (item.status === 0 && item.id !== 0))) {
         const [s_year, s_month, s_day] = item.startDate;
         item.startDate = `${s_year}年${s_month}月${s_day}日`;
         const [e_year, e_month, e_day] = item.endDate;
