@@ -447,25 +447,24 @@
         <div v-if="show_activity_application_list" class="activity-applies"
           style="margin-left: 2%; width: 95%; margin-top: 2%;">
           <p style="font-size: large; margin-top: 2%; margin-left: 2%;">待批准的活动申请</p>
-          <div class="rcSaleActivityApps" style="width: 98%; margin-left: 1%;" v-for="activity_app in rc_activity_app"
-            :key="activity_app">
+          <div class="rcSaleActivityApps" style="width: 98%; margin-left: 1%;">
             <div v-for="app in rc_activity_app" :key="app">
               <q-card class="my-card" flat bordered style="margin-top: 2%;">
                 <q-card-section horizontal>
                   <q-card-section class="q-pt-xs">
                     <div class="RCactivityApp-info-box">
-                      <div class="text-overline text-orange-9">{{ activity_app.event.startDate }}至{{
-                        activity_app.event.endDate }}</div>
-                      <div style="font-weight: bold;">申请人：{{ activity_app.shop.shopName }}</div>
+                      <div class="text-overline text-orange-9">{{ app.event.startDate }}至{{
+                        app.event.endDate }}</div>
+                      <div style="font-weight: bold;">申请人：{{ app.shop.shopName }}</div>
                       申请人售卖的商品类别：
-                      <div class="apply-shop-category" v-for="category in activity_app.shop.category" :key="category"
+                      <div class="apply-shop-category" v-for="category in app.shop.category" :key="category"
                         style="display: inline-block;">
                         {{ category }}&nbsp;
                       </div>
-                      <div class="q-mt-sm q-mb-xs" style="font-weight: bold;">申请活动：满{{ activity_app.event.amount }}减{{
-                        activity_app.event.discount }}</div>
+                      <div class="q-mt-sm q-mb-xs" style="font-weight: bold;">申请活动：满{{ app.event.amount }}减{{
+                        app.event.discount }}</div>
                       可参与活动的商品：
-                      <div class="activity-category" v-for="category in activity_app.event.category" :key="category"
+                      <div class="activity-category" v-for="category in app.event.category" :key="category"
                         style="display: inline-block; ">
                         {{ category }}&nbsp;
                       </div>
@@ -1570,7 +1569,7 @@ function getRcSalesActivityApp() {
     const r = response.data['data']
     console.log('待批准的活动申请: ', r);
     r.forEach(function (item) {
-      if (item != null && item.status === 1) {
+      if (item != null && (item.event.status === 1 || (item.event.status === 0 && item.event.id !== 0))) {
         const [s_year, s_month, s_day] = item.event.startDate;
         item.event.startDate = `${s_year}年${s_month}月${s_day}日`;
         const [e_year, e_month, e_day] = item.event.endDate;
