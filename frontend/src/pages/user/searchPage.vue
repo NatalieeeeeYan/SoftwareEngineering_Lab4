@@ -67,7 +67,7 @@
                 <!--商品信息展示---->
                 <div class="text-h6">Commodity</div>
                 <div v-if="loading">
-                  <q-spinner-comment color="deep-purple" size="5.5em"/>
+                  <q-spinner-comment color="deep-purple" size="5.5em" />
                 </div>
                 <div v-else>
                   <div class="flex justify-center">
@@ -79,27 +79,31 @@
                             <div class="q-pa-md">
                               <q-carousel class="commodity_img" swipeable animated v-model="commodity.slide"
                                 height="200px" thumbnails infinite>
-                                <q-carousel-slide v-for="(image, index) in commodity.image" :key="index" :name="index + 1"
-                                  :img-src="image" />
+                                <q-carousel-slide v-for="(image, index) in commodity.goods.image" :key="index"
+                                  :name="index + 1" :img-src="image" />
                               </q-carousel>
                             </div>
 
                             <q-card-section>
                               <div class="row no-wrap items-center">
-                                <q-btn flat class="text-h6" @click="toCommodity(commodity.id)">
-                                  {{ commodity.goodsName }}
+                                <q-btn flat class="text-h6" @click="toCommodity(commodity.goods.id)">
+                                  {{ commodity.goods.goodsName }}
                                 </q-btn>
+                                <q-chip v-if="commodity.event.id != 0 && commodity.event.status == 1" outline color="orange"
+                                  text-color="white" icon-right="star">
+                                  满{{ commodity.event.amount }}减{{ commodity.event.discount }}
+                                </q-chip>
                               </div>
 
-                              <q-rating v-model="commodity.stars" :max="5" size="32px" />
+                              <q-rating v-model="commodity.goods.stars" :max="5" size="32px" />
                             </q-card-section>
 
                             <q-card-section class="q-pt-none">
                               <div class="text-subtitle1">
-                                ¥ price: {{ commodity.price }}
+                                ¥ price: {{ commodity.goods.price }}
                               </div>
                               <div class="text-caption text-grey">
-                                {{ commodity.description }}
+                                {{ commodity.goods.description }}
                               </div>
                             </q-card-section>
                           </q-card>
@@ -175,6 +179,7 @@ function search() {
   console.log("搜索")
   localStorage.setItem('text', text.value);
 
+  commodities.value = []
   let r1, r2;
   loading.value = true;
 
@@ -185,8 +190,7 @@ function search() {
   }).then((response) => {
     commodities.value = []
     r1 = response.data['data']
-    console.log('请求所有商品信息：', r)
-    // commodities.value = r
+    console.log("r1: ", r1);
     instance.proxy.$forceUpdate();
     axiosInstance.get('/Goods/searchGoodsCategory', {
       params: {
@@ -194,8 +198,21 @@ function search() {
       }
     }).then((response) => {
       r2 = response.data['data']
-      console.log('请求所有商品信息：', r)
-      commodities.value = r1 + r2;
+      console.log("r2: ", r2);
+      for(let i=0; i<r2.length; i++){
+        let flag = 0;
+        for(let j=0; j<r1.length; j++){
+          if(r2[i].goods.id == r1[j].goods.id){
+            flag = 1;
+            break;
+          }
+        }
+        if(flag == 0){
+          r1.push(r2[i]);
+        }
+      }
+      commodities.value = r1;
+      console.log("r: ", commodities  );
       loading.value = false
       if (commodities.value.length == 0) {
         alert("没有搜索到相关商品")
@@ -209,8 +226,7 @@ function search() {
 onMounted(() => {
   console.log("localStorage")
   console.log(localStorage.getItem('userId'))
-
-  text.value = localStorage.getItem('text')
+  let r1, r2;
   commodities.value = []
 
   //请求搜索结果
@@ -220,12 +236,35 @@ onMounted(() => {
     }
   }).then((response) => {
     commodities.value = []
-    const r = response.data['data']
-    console.log('请求所有商品信息：', r)
-    commodities.value = r
-    if (commodities.value.length == 0) {
-      alert("没有搜索到相关商品")
-    }
+    r1 = response.data['data']
+    instance.proxy.$forceUpdate();
+    console.log("r1: ", r1);
+    axiosInstance.get('/Goods/searchGoodsCategory', {
+      params: {
+        keyword: text.value
+      }
+    }).then((response) => {
+      r2 = response.data['data']
+      console.log("r2: ", r2);
+      for(let i=0; i<r2.length; i++){
+        let flag = 0;
+        for(let j=0; j<r1.length; j++){
+          if(r2[i].goods.id == r1[j].goods.id){
+            flag = 1;
+            break;
+          }
+        }
+        if(flag == 0){
+          r1.push(r2[i]);
+        }
+      }
+      commodities.value = r1;
+      console.log("r: ", commodities  );
+      loading.value = false
+      if (commodities.value.length == 0) {
+        alert("没有搜索到相关商品")
+      }
+    });
   });
 
 });

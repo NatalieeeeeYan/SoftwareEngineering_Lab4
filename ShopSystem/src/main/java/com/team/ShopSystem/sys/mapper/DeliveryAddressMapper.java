@@ -2,7 +2,6 @@ package com.team.ShopSystem.sys.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.team.ShopSystem.sys.entity.DeliveryAddress;
-import io.swagger.models.auth.In;
 
 import java.util.List;
 

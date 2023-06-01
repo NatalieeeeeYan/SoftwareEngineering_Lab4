@@ -479,7 +479,7 @@
                 <q-separator style="width: 98%; margin-left: 1%;" />
 
                 <q-card-actions>
-                  <q-btn flat @click="approveSalesActivityApp(activity_app)">
+                  <q-btn flat @click="approveSalesActivityApp(app)">
                     批准
                   </q-btn>
                   <q-btn flat color="primary" @click="disapproveSalesActivityApp">
@@ -1638,6 +1638,7 @@ function getRSalesActivityApp() {
 }
 
 function approveSalesActivityApp(activity_application) {
+  console.log(activity_application);
   console.log('同意参加活动修改传参：', activity_application.eventApply.id)
   axiosInstance.put('/event/approveApply', {
     applyId: activity_application.eventApply.id,
