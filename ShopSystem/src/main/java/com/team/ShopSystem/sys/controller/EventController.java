@@ -7,13 +7,10 @@ import com.team.ShopSystem.sys.entity.*;
 import com.team.ShopSystem.sys.mapper.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.stereotype.Controller;
 
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
@@ -125,7 +122,8 @@ public class EventController {
         List<Goods> goods = goodsMapper.getByShopId(eventApply.getShopId());
         for (Goods good : goods) {
             List<String> goodCategory = goodsCategoryMapper.getByGoodsId(good.getId());
-            int i,j;
+            int i;
+            int j;
             for (i = 0;i<goodCategory.size();i++) {
                 for(j = 0;j<eventCategory.size();j++){
                     if(goodCategory.get(i).equals(eventCategory.get(j))){

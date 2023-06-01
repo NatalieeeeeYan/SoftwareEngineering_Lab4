@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -44,7 +45,6 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
 
     @Override
     public Result<?> addGoodsApply(Goods goods,Integer shopId){
-        System.out.println(goods);
         goods.setShopId(shopId);
         goods.setStatus(0);
         goodsMapper.insertGoods(goods);
@@ -122,9 +122,33 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
         return goods;
     }
     @Override
-    public Result<List<Goods>> searchGoods(String keyword){
+    public Result<List<GoodsPlus>> searchGoods(String keyword){
         List<Goods> goodsList=goodsMapper.getByKeyword(keyword);
-        return Result.success(goodsList);
+        Collections.sort(goodsList);
+        List<GoodsPlus> goodsPlusList=new ArrayList<>();
+        for(Goods goods:goodsList){
+            goods.setImage(goodsImageMapper.getByGoodsId(goods.getId()));
+            goods.setCategory(goodsCategoryMapper.getByGoodsId(goods.getId()));
+            goodsPlusList.add(new GoodsPlus(goods,eventMapper.selectById(goods.getEventId())));
+        }
+        return Result.success(goodsPlusList);
+    }
+
+    @Override
+    public Result<List<GoodsPlus>> searchGoodsCategory(String keyword) {
+        List<Integer> goodsIdList=goodsCategoryMapper.getByCategory(keyword);
+        List<Goods> goodsList=new ArrayList<>();
+        for(Integer goodsId:goodsIdList){
+            goodsList.add(goodsMapper.getById(goodsId));
+        }
+        Collections.sort(goodsList);
+        List<GoodsPlus> goodsPlusList=new ArrayList<>();
+        for(Goods goods:goodsList){
+            goods.setImage(goodsImageMapper.getByGoodsId(goods.getId()));
+            goods.setCategory(goodsCategoryMapper.getByGoodsId(goods.getId()));
+            goodsPlusList.add(new GoodsPlus(goods,eventMapper.selectById(goods.getEventId())));
+        }
+        return Result.success(goodsPlusList);
     }
 
     @Override

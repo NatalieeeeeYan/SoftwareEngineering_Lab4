@@ -9,8 +9,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
-import java.util.Date;
-import java.util.Locale;
 import java.util.Objects;
 
 /**
@@ -52,7 +50,7 @@ public class TransferRecords{
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        TransferRecords that = (TransferRecords) o;
+        TransferRecords that = o instanceof TransferRecords ? ((TransferRecords) o) : null;
         return Objects.equals(id, that.id) && Objects.equals(transferName, that.transferName) && Objects.equals(amount, that.amount) && Objects.equals(receiveName, that.receiveName) && Objects.equals(deleted, that.deleted);
     }
 

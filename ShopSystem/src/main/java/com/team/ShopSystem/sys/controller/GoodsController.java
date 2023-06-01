@@ -3,7 +3,6 @@ package com.team.ShopSystem.sys.controller;
 import com.team.ShopSystem.common.vo.Result;
 import com.team.ShopSystem.config.ConstantsProperties;
 import com.team.ShopSystem.sys.entity.Goods;
-import com.team.ShopSystem.sys.entity.GoodsCategory;
 import com.team.ShopSystem.sys.entity.GoodsPlus;
 import com.team.ShopSystem.sys.entity.GoodsUpdate;
 import com.team.ShopSystem.sys.mapper.*;
@@ -312,11 +311,17 @@ public class GoodsController {
     }
 
     @GetMapping("/searchGoods")
-    @ApiOperation("搜索商品")
-    public Result<List<Goods>> searchGoods(@RequestParam String keyword){
+    @ApiOperation("搜索商品（按商品名称）")
+    public Result<List<GoodsPlus>> searchGoods(@RequestParam String keyword){
         return goodsService.searchGoods(keyword);
     }
 
+
+    @GetMapping("/searchGoodsCategory")
+    @ApiOperation("搜索商品(按商品类别)")
+    public Result<List<GoodsPlus>> searchGoodsCategory(@RequestParam String keyword){
+        return goodsService.searchGoodsCategory(keyword);
+    }
     @GetMapping("/showRecommendGoods")
     @ApiOperation("首页推荐")
     public Result<List<GoodsPlus>> showRecommendGoods(@RequestParam Integer userId){

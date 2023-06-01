@@ -86,7 +86,7 @@
                             <div class="q-pa-md">
                               <q-carousel class="commodity_img" swipeable animated v-model="commodity.goods.slide"
                                 height="200px" thumbnails infinite>
-                                <q-carousel-slide v-for="(image, index) in commodity.goods.image" :key="index" :name="index + 1"
+                                <q-carousel-slide v-for="(image, index) in commodity.image" :key="index" :name="index + 1"
                                   :img-src="image" />
                               </q-carousel>
                             </div>
@@ -200,7 +200,7 @@
                           <div class="text-caption text-grey" style="text-align: center; margin-top: 10px;">暂时没有商品参加该活动
                           </div>
                         </div>
-                        <div v-else>
+                        <div style="width:100%" v-else>
                           <div v-for="commodity in sale_activity_commodities" :key="commodity"
                             class="flex q-py-xs justify-around" style="width: 400px;">
                             <q-card class="my-card">

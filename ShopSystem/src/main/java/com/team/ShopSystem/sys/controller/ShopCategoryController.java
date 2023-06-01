@@ -1,7 +1,6 @@
 package com.team.ShopSystem.sys.controller;
 
 import com.team.ShopSystem.common.vo.Result;
-import com.team.ShopSystem.sys.entity.ShopCategory;
 import com.team.ShopSystem.sys.mapper.ShopCategoryMapper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
