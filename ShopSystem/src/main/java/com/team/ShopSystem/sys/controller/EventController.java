@@ -53,6 +53,8 @@ public class EventController {
     UserOrderMapper userOrderMapper;
     @Autowired
     TransferRecordsController transferRecordsController;
+    @Autowired
+    GoodsImageMapper goodsImageMapper;
     @ApiOperation("新增活动")
     @PostMapping("/openEvent")
     public Result<?> openEvent(@RequestBody Event event, @RequestParam String sdate){
@@ -107,6 +109,30 @@ public class EventController {
         }
         if((float)transferRecordsController.getShopWithinOneMonth(shopId).get(0).getData()<event.getShopProfit()){
             return Result.fail(MsgEnum.ERROR_SHOPPROFIT);
+        }
+        List<String> eventCategory = eventCategoryMapper.selectByEventId(eventId);
+        List<Goods> goods = goodsMapper.getByShopId(shopId);
+        int k;
+        for (k = 0;k<goods.size();k++) {
+            List<String> goodCategory = goodsCategoryMapper.getByGoodsId(goods.get(k).getId());
+            int i;
+            int j;
+            for (i = 0;i<goodCategory.size();i++) {
+                for(j = 0;j<eventCategory.size();j++){
+                    if(goodCategory.get(i).equals(eventCategory.get(j))){
+                        break;
+                    }
+                }
+                if(j!=eventCategory.size()){
+                    break;
+                }
+            }
+            if(i!=goodCategory.size()){
+                break;
+            }
+        }
+        if(k == goods.size()){
+            return Result.fail(MsgEnum.ERROR_SHOPCATEGORY);
         }
         eventApplyMapper.insert(new EventApply(eventId,shopId));
         return Result.success("申请参与活动成功");
@@ -169,6 +195,8 @@ public class EventController {
         for (Goods goods : goodsList) {
             List<String> categoryList = goodsCategoryMapper.getByGoodsId(goods.getId());
             goods.setCategory(categoryList);
+            List<String> imageList = goodsImageMapper.getByGoodsId(goods.getId());
+            goods.setImage(imageList);
         }
         return Result.success(goodsList,"显示所有参加某一活动的商品");
     }

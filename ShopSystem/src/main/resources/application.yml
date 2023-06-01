@@ -33,6 +33,13 @@ constants:
   applyDeleted: 3
   deleted: 4
   rejectDeleted: 5
+  unpaid: 0
+  paid: 1
+  shipped: 2
+  finished: 3
+  cancelled: 4
+  refunding: 5
+  refunded: 6
 
 prop:
   upload-folder: /opt/project/springboot/uploadImage/
