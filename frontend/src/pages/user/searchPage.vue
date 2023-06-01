@@ -66,44 +66,50 @@
               <q-tab-panel name="Commodity">
                 <!--商品信息展示---->
                 <div class="text-h6">Commodity</div>
-                <div class="flex justify-center">
-                  <q-scroll-area :visible="visible" style="height: 620px; width: 800px;" class="flex justify-center">
-                    <div class="flex q-justify-around" style="width: 800px;">
-                      <div v-for="commodity in commodities" :key="commodity" class="flex q-py-xs justify-around"
-                        style="width: 400px;">
-                        <q-card class="my-card">
-                          <div class="q-pa-md">
-                            <q-carousel class="commodity_img" swipeable animated v-model="commodity.slide" height="200px"
-                              thumbnails infinite>
-                              <q-carousel-slide v-for="(image, index) in commodity.image" :key="index" :name="index + 1"
-                                :img-src="image" />
-                            </q-carousel>
-                          </div>
-
-                          <q-card-section>
-                            <div class="row no-wrap items-center">
-                              <q-btn flat class="text-h6" @click="toCommodity(commodity.id)">
-                                {{ commodity.goodsName }}
-                              </q-btn>
-                            </div>
-
-                            <q-rating v-model="commodity.stars" :max="5" size="32px" />
-                          </q-card-section>
-
-                          <q-card-section class="q-pt-none">
-                            <div class="text-subtitle1">
-                              ¥ price: {{ commodity.price }}
-                            </div>
-                            <div class="text-caption text-grey">
-                              {{ commodity.description }}
-                            </div>
-                          </q-card-section>
-                        </q-card>
-                        <q-separator />
-                      </div>
-                    </div>
-                  </q-scroll-area>
+                <div v-if="loading">
+                  <q-spinner-comment color="deep-purple" size="5.5em"/>
                 </div>
+                <div v-else>
+                  <div class="flex justify-center">
+                    <q-scroll-area :visible="visible" style="height: 620px; width: 800px;" class="flex justify-center">
+                      <div class="flex q-justify-around" style="width: 800px;">
+                        <div v-for="commodity in commodities" :key="commodity" class="flex q-py-xs justify-around"
+                          style="width: 400px;">
+                          <q-card class="my-card">
+                            <div class="q-pa-md">
+                              <q-carousel class="commodity_img" swipeable animated v-model="commodity.slide"
+                                height="200px" thumbnails infinite>
+                                <q-carousel-slide v-for="(image, index) in commodity.image" :key="index" :name="index + 1"
+                                  :img-src="image" />
+                              </q-carousel>
+                            </div>
+
+                            <q-card-section>
+                              <div class="row no-wrap items-center">
+                                <q-btn flat class="text-h6" @click="toCommodity(commodity.id)">
+                                  {{ commodity.goodsName }}
+                                </q-btn>
+                              </div>
+
+                              <q-rating v-model="commodity.stars" :max="5" size="32px" />
+                            </q-card-section>
+
+                            <q-card-section class="q-pt-none">
+                              <div class="text-subtitle1">
+                                ¥ price: {{ commodity.price }}
+                              </div>
+                              <div class="text-caption text-grey">
+                                {{ commodity.description }}
+                              </div>
+                            </q-card-section>
+                          </q-card>
+                          <q-separator />
+                        </div>
+                      </div>
+                    </q-scroll-area>
+                  </div>
+                </div>
+
               </q-tab-panel>
             </q-tab-panels>
           </div>
@@ -136,6 +142,7 @@ const userId = localStorage.getItem('userId');
 const tab = ref("Commodity")
 const router = useRouter()
 const text = ref(localStorage.getItem('text'))
+const loading = ref(false)
 
 const axiosInstance = axios.create({
   baseURL: 'http://120.46.154.28:9999',
@@ -164,22 +171,37 @@ function toShop(id) {
   router.push('/shop');
 }
 
-function search(){
+function search() {
   console.log("搜索")
   localStorage.setItem('text', text.value);
+
+  let r1, r2;
+  loading.value = true;
+
   axiosInstance.get('/Goods/searchGoods', {
     params: {
-      keyword:text.value
+      keyword: text.value
     }
   }).then((response) => {
     commodities.value = []
-    const r = response.data['data']
+    r1 = response.data['data']
     console.log('请求所有商品信息：', r)
-    commodities.value = r
+    // commodities.value = r
     instance.proxy.$forceUpdate();
-    if(commodities.value.length == 0){
-      alert("没有搜索到相关商品")
-    }
+    axiosInstance.get('/Goods/searchGoodsCategory', {
+      params: {
+        keyword: text.value
+      }
+    }).then((response) => {
+      r2 = response.data['data']
+      console.log('请求所有商品信息：', r)
+      commodities.value = r1 + r2;
+      loading.value = false
+      if (commodities.value.length == 0) {
+        alert("没有搜索到相关商品")
+      }
+    });
+
   });
 
 }
@@ -194,14 +216,14 @@ onMounted(() => {
   //请求搜索结果
   axiosInstance.get('/Goods/searchGoods', {
     params: {
-      keyword:localStorage.getItem('text')
+      keyword: localStorage.getItem('text')
     }
   }).then((response) => {
     commodities.value = []
     const r = response.data['data']
     console.log('请求所有商品信息：', r)
     commodities.value = r
-    if(commodities.value.length == 0){
+    if (commodities.value.length == 0) {
       alert("没有搜索到相关商品")
     }
   });

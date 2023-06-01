@@ -10,8 +10,13 @@
           </q-avatar>
           购物车
         </q-toolbar-title>
+        <q-btn-group outline>
         <q-btn color="grey-4" text-color="purple" glossy unelevated icon="settings" @click="settings()">{{ setting_lable
         }}</q-btn>
+
+
+        <q-btn label="返回首页" color="purple" to="/user"></q-btn>
+      </q-btn-group>
       </q-toolbar>
 
     </q-header>
