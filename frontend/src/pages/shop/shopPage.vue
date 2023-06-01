@@ -12,6 +12,7 @@
           Welcome to {{ shopName }}
         </q-toolbar-title>
 
+        <q-btn label="返回首页" to="/user"></q-btn>
       </q-toolbar>
     </q-header>
 
