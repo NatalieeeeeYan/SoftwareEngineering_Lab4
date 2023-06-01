@@ -195,12 +195,12 @@
                   <!--商品信息展示---->
                   <div class="flex justify-center">
                     <q-scroll-area :visible="visible" style="height: 620px; width: 800px;" class="flex justify-center">
-                      <div class="flex q-justify-around" style="width: 800px;">
-                        <div v-if="sale_activity_commodities.length === 0" class="no-activity">
+                      <div class="acticity-commodity-display">
+                        <div v-if="sale_activity_commodities.length === 0" class="flex q-justify-around" style="width: 800px;">
                           <div class="text-caption text-grey" style="text-align: center; margin-top: 10px;">暂时没有商品参加该活动
                           </div>
                         </div>
-                        <div v-else>
+                        <div v-else class="flex q-justify-around" style="width: 800px;">
                           <div v-for="commodity in sale_activity_commodities" :key="commodity"
                             class="flex q-py-xs justify-around" style="width: 400px;">
                             <q-card class="my-card">
