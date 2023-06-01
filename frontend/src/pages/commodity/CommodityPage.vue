@@ -169,7 +169,7 @@ const router = useRouter()
 const layout = ref(false)
 
 const axiosInstance = axios.create({
-  baseURL: 'http://localhost:9999',
+  baseURL: 'http://120.46.154.28:9999',
 });
 
 const commodityQuantity = ref(1)
@@ -249,15 +249,27 @@ function toOrder(){
   //未优惠价格
   const total = commodity.value.goods.price * commodityQuantity.value
   //优惠价格
-  const multiple = Math.floor(total / commodity.value.event.amount);
+  let multiple = 0
+  if(commodity.value.event.id)
+  {
+    multiple.value = Math.floor(total / commodity.value.event.amount);
+  }
   const total_event = total - multiple*commodity.value.event.discount;
   const total_discount = total - total_event;
 
   localStorage.setItem('total', total)
   localStorage.setItem('total_event', total_event)
   localStorage.setItem('total_discount', total_discount)
+  console.log('total')
+  console.log(total)
+  console.log('total_event')
+  console.log(total_event)
+  console.log('total_discount')
+  console.log(total_discount)
 
   const unitPrice = parseFloat((total_event / commodityQuantity.value).toFixed(2))
+  console.log('unitPrice')
+  console.log(unitPrice)
 
   let obj = {
     "eventId": commodity.value.goods.eventId,
@@ -269,6 +281,9 @@ function toOrder(){
     "unitPrice": unitPrice,
     "userId": localStorage.getItem('userId')
   }
+  console.log('obj')
+  console.log(obj)
+
   result_list.push(obj)
   const event_detail = {}
   commodity.value.event['event_price'] = total
@@ -277,6 +292,8 @@ function toOrder(){
   console.log(commodity.value)
   let list =[]
   list.push(commodity.value)
+  console.log('list')
+  console.log(list)
 
   if(commodity.value.event.id == 0 || commodity.value.event.status!=1){
     event_detail['0'] = list
@@ -284,6 +301,8 @@ function toOrder(){
   else{
     event_detail[commodity.value.event.id] = list
   }
+  console.log('result_list')
+  console.log(result_list)
 
   localStorage.setItem('event_detail', JSON.stringify(event_detail))
   axiosInstance.post('/userOrderTemplate/order', result_list).then((res) => {

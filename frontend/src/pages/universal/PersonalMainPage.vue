@@ -122,7 +122,7 @@
 
           <div class="personalInfo-display-change" style="max-width: 100%; width: 70%;">
             <div class="textInfo" style="max-width: 100%; width: 100%;">
-              <q-form ref="myForm" action="http://localhost:9999/user" method="post" @submit="postProfileUpdate"
+              <q-form ref="myForm" action="http://120.46.154.28:9999/user" method="post" @submit="postProfileUpdate"
                 @reset="onReset" class="q-gutter-md">
                 <dl>
                   <dt>
@@ -286,7 +286,7 @@
 
               <q-page-container>
                 <q-page padding>
-                  <q-form ref="myForm" action="http://localhost:9999/user" method="post" @submit="submitNewAddress"
+                  <q-form ref="myForm" action="http://120.46.154.28:9999/user" method="post" @submit="submitNewAddress"
                     @reset="onReset" class="q-gutter-md">
                     <br />
                     <q-input></q-input>
@@ -1158,15 +1158,14 @@ import { useRouter } from 'vue-router'
 
 
 const axiosInstance = axios.create({
-  // baseURL: 'http://localhost:9999',
-  baseURL: 'http://localhost:9999',
+  // baseURL: 'http://120.46.154.28:9999',
+  baseURL: 'http://120.46.154.28:9999',
 });
 let response_register = ref(null)
 let code = ref(null)
 
 const leftDrawerOpen = ref(true)
 const q = useQuasar()
-const store = useStore()
 
 // 功能变量
 // url: swy GitHub的头像，以下网页链接是GitHub“储存”我的头像的链接
@@ -1431,43 +1430,38 @@ function handleClick(link) {
   console.log('handle click: ', link)
   console.log("is merchant?: ", isMerchant.value)
   if (link.icon === 'person') {
-    this.showDefault = false
-    this.showAccountInfo = true
-    this.showAccountAmount = false
-    this.showAddress = false
-    this.showOrder = false
-    this.headerLabel = '个人信息'
+    showAccountInfo.value = true
+    showAccountAmount.value = false
+    showAddress.value = false
+    showOrder.value = false
+    headerLabel.value = '个人信息'
   } else if (link.icon === 'star_border') {
-    this.showDefault = false
-    this.showAccountInfo = false
-    this.showAccountAmount = true
-    this.showAddress = false
-    this.showOrder = false
-    this.headerLabel = '我的账户'
+    showAccountInfo.value = false
+    showAccountAmount.value = true
+    showAddress.value = false
+    showOrder.value = false
+    headerLabel.value = '我的账户'
   }
   else if (link.icon === 'link') {
-    this.showDefault = false
-    this.showAccountInfo = false
-    this.showAccountAmount = false
-    this.showAddress = true
-    this.showOrder = false
-    this.headerLabel = '我的收货地址'
+    showAccountInfo.value = false
+    showAccountAmount.value = false
+    showAddress.value = true
+    showOrder.value = false
+    headerLabel.value = '我的收货地址'
   }
   else if (link.icon === 'shopping_cart') {
-    this.showDefault = false
-    this.showAccountInfo = false
-    this.showAccountAmount = false
-    this.showAddress = false
-    this.showOrder = true
-    this.headerLabel = '我的订单'
+    showAccountInfo.value = false
+    showAccountAmount.value = false
+    showAddress.value = false
+    showOrder.value = true
+    headerLabel.value = '我的订单'
   }
   else {
-    this.showDefault = true
-    this.showAccountInfo = false
-    this.showAccountAmount = false
-    this.showAddress = false
-    this.showOrder = false
-    this.headerLabel = '个人信息'
+    showAccountInfo.value = false
+    showAccountAmount.value = false
+    showAddress.value = false
+    showOrder.value = false
+    headerLabel.value = '个人信息'
   }
   console.log("after click: ",
     "show user info: ", showAccountInfo.value,
@@ -2223,13 +2217,13 @@ function cancelOrder(orderId) {
 // 用户确认收货
 function ensureReceiveOrder(order) {
   let current_time = getFormattedDate()
-  console.log("User confirm receiving: \norder实例：", order,  
-              "\naddressId: ", order.deliveryAddress.id, 
-              "\ndate: ", order.userOrder.date, 
+  console.log("User confirm receiving: \norder实例：", order,
+              "\naddressId: ", order.deliveryAddress.id,
+              "\ndate: ", order.userOrder.date,
               "\nevent Id: ", order.userOrder.eventId,
               "\ngoods Id: ", order.goods.id,
               "\norder id: ", order.userOrder.id,
-              "\nquantity: ", order.userOrder.quantity, 
+              "\nquantity: ", order.userOrder.quantity,
               "\nshop id: ", order.shop.id,
               "\ntotal price: ", order.userOrder.totalPrice,
               "\nunit price: ", order.userOrder.unitPrice,

@@ -671,7 +671,7 @@ import { useQuasar } from 'quasar'
 
 const q = useQuasar();
 const axiosInstance = axios.create({
-  baseURL: 'http://localhost:9999',
+  baseURL: 'http://120.46.154.28:9999',
 });
 
 // 操作成功or失败的提示

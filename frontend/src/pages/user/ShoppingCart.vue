@@ -293,7 +293,7 @@ let selectedCommoditiesObject = [] //选中的商品对象
 let selectedCommoditiesObjects = [] //在金额明细中不更新
 
 const axiosInstance = axios.create({
-  baseURL: 'http://localhost:9999/',
+  baseURL: 'http://120.46.154.28:9999/',
 });
 
 const commodities = ref([])

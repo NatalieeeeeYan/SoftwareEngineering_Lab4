@@ -402,7 +402,7 @@ let show = ref(false)
 let show_paying = ref(false)
 
 const axiosInstance = axios.create({
-  baseURL: 'http://localhost:9999',
+  baseURL: 'http://120.46.154.28:9999',
 });
 let response_register = ref(null)
 let code = ref(null)
@@ -443,7 +443,6 @@ function getTemplateOrder() {
 }
 
 function goPaying() {
-  show_paying.value = true
   const result_list = []
   //下单日期
   let currentDate = new Date();
@@ -451,29 +450,37 @@ function goPaying() {
   let month = String(currentDate.getMonth() + 1).padStart(2, '0');
   let day = String(currentDate.getDate()).padStart(2, '0');
 
-  let formattedDate = `${year}-${month}-${day}`;
-  //来自购物车
-  console.log('order_lst.value: ')
-  console.log(order_lst.value)
-  for (let i = 0; i < order_lst.value.length; i++) {
-    order_lst.value[i].userOrderTemplate['addressId'] = selectAddress.value.id
-    order_lst.value[i].userOrderTemplate['date'] = formattedDate
-    result_list.push(order_lst.value[i].userOrderTemplate)
-  }
-  console.log('result_list: ')
-  console.log(result_list)
-  if (result_list[0].source == true) {
-    axiosInstance.post('/userOrder/orderFromCart', result_list).then((response) => {
-      const r = response.data
-      console.log('r: ', r)
-    });
+  if (isDefault.value != true) {
+    alert('请选择收货地址')
   }
   else {
-    axiosInstance.post('/userOrder/orderDirect', result_list).then((response) => {
-      const r = response.data
-      console.log('r: ', r)
-    });
+    show_paying.value = true
+    let formattedDate = `${year}-${month}-${day}`;
+    //来自购物车
+    console.log('order_lst.value: ')
+    console.log(order_lst.value)
+    for (let i = 0; i < order_lst.value.length; i++) {
+      order_lst.value[i].userOrderTemplate['addressId'] = selectAddress.value.id
+      order_lst.value[i].userOrderTemplate['date'] = formattedDate
+      result_list.push(order_lst.value[i].userOrderTemplate)
+    }
+    console.log('result_list: ')
+    console.log(result_list)
+    if (result_list[0].source == true) {
+      axiosInstance.post('/userOrder/orderFromCart', result_list).then((response) => {
+        const r = response.data
+        console.log('r: ', r)
+      });
+    }
+    else {
+      axiosInstance.post('/userOrder/orderDirect', order_lst.value[0].userOrderTemplate).then((response) => {
+        const r = response.data
+        console.log('r: ', r)
+      });
+    }
   }
+
+
 }
 
 function payOrder() {
@@ -498,11 +505,16 @@ function payOrder() {
   axiosInstance.post('/userOrder/pay', result_list).then((response) => {
     const r = response.data
     console.log('r: ', r)
-    if(r.code == 20010){
+    if (r.code == 20010) {
       alert('账户余额不足，支付失败')
+      router.push({ path: '/accountInfo', query: { order: false } })
     }
-    else if(r.code == 20000){
+    else if (r.code == 20000) {
       alert('支付成功')
+      router.push({ path: '/accountInfo', query: { order: false } })
+    }
+    else if (r.code == 20016) {
+      alert('活动已结束')
       router.push({ path: '/accountInfo', query: { order: false } })
     }
   });

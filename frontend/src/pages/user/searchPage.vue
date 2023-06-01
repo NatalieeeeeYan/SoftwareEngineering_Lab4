@@ -138,7 +138,7 @@ const router = useRouter()
 const text = ref(localStorage.getItem('text'))
 
 const axiosInstance = axios.create({
-  baseURL: 'http://localhost:9999',
+  baseURL: 'http://120.46.154.28:9999',
 });
 const instance = getCurrentInstance()
 

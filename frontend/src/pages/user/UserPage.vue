@@ -322,7 +322,7 @@ let show_activity = ref(false)
 let show_commodity = ref(true)
 
 const axiosInstance = axios.create({
-  baseURL: 'http://localhost:9999',
+  baseURL: 'http://120.46.154.28:9999',
 });
 const shops = ref([])
 const instance = getCurrentInstance()

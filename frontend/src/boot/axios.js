@@ -4,7 +4,7 @@ import axios from 'axios'
 
 export default ({ app, router, store, ssrContext }) => {
   const axiosInstance = axios.create({
-    baseURL: 'http://localhost:9999'
+    baseURL: 'http://120.46.154.28:9999'
   })
 
   // 添加请求拦截器

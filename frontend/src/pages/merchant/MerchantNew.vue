@@ -446,7 +446,7 @@ let current_time = ref(null)
 let delete_shop_confirm = ref(false)  // 闭店确认
 
 const axiosInstance = axios.create({
-  baseURL: 'http://localhost:9999',
+  baseURL: 'http://120.46.154.28:9999',
 });
 let allShops = ref([])
 let openingShops = ref([])
