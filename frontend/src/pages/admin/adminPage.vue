@@ -1563,9 +1563,9 @@ function submitNewSalesActivity() {
     discount: sales_decrease_price.value,
     endDate: activity_end_date.value,
     funds: sales_fund.value,
-    shopFund: shop_register_fund.value, 
-    shopProfit: shop_monthly_profit.value, 
-    shopSales: shop_selling_amount.value, 
+    shopFund: shop_register_fund.value,
+    shopProfit: shop_monthly_profit.value,
+    shopSales: shop_selling_amount.value,
     startDate: activity_start_date.value,
   }, {
     params: {
